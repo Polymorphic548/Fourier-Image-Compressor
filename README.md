@@ -1,5 +1,7 @@
 # Fourier Image Compressor
 
+> **Repository Note:** This is a clean, final-display repository created to present the completed project and its implementation. It is a secondary repository and therefore does not contain the full commit history, development iterations, experiments, or earlier versions involved in building the project.
+
 A desktop image-compression system that demonstrates how the **Discrete Fourier Transform (DFT)** and **Fast Fourier Transform (FFT)** can be used to represent, selectively remove, store, and reconstruct image information in the spatial-frequency domain.
 
 The project was developed as a **Signals, Networks & Systems** application of Fourier analysis. Instead of directly modifying pixels, the image is transformed into a collection of spatial-frequency components. Fourier coefficients with relatively small magnitudes are discarded, while the strongest coefficients are retained and stored as a sparse matrix.
