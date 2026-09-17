@@ -8,8 +8,6 @@ The project was developed as a **Signals, Networks & Systems** application of Fo
 
 > **Note:** This is an educational Fourier-domain compression system intended to demonstrate signal-processing concepts. It is not designed to outperform mature image codecs such as JPEG, WebP, or AVIF.
 
-![Fourier Image Compressor Screenshot](./Artifact/ScreenShot_1.png)
-
 ---
 
 ## Overview
@@ -76,7 +74,7 @@ Reconstructed Image
 
 The following screenshot shows the application compressing a sample image using a high Fourier compression percentile.
 
-![Fourier Image Compressor Example](samples/sample%201.png)
+![Fourier Image Compressor Screenshot](./Artifact/ScreenShot_1.png)
 
 The interface displays:
 
