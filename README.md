@@ -14,15 +14,15 @@ The project was developed as a **Signals, Networks & Systems** application of Fo
 
 A digital image can be interpreted as a two-dimensional discrete signal:
 
-$$
+```math
 f(x,y)
-$$
+```
 
 where:
 
-- $x$ represents the horizontal spatial coordinate,
-- $y$ represents the vertical spatial coordinate,
-- $f(x,y)$ represents the intensity of the pixel at that position.
+- \(x\) represents the horizontal spatial coordinate,
+- \(y\) represents the vertical spatial coordinate,
+- \(f(x,y)\) represents the intensity of the pixel at that position.
 
 Instead of storing and processing the image purely in the spatial domain, the system transforms the image into the **frequency domain** using a two-dimensional Discrete Fourier Transform.
 
@@ -94,13 +94,13 @@ The interface displays:
 
 The first step is to interpret the image as a discrete two-dimensional signal.
 
-For an image having width $N$ and height $M$,
+For an image having width \(N\) and height \(M\),
 
-$$
+```math
 f(x,y), \qquad
 0 \leq x < N,\quad
 0 \leq y < M
-$$
+```
 
 represents the intensity of each pixel.
 
@@ -114,9 +114,9 @@ This also follows the compression approach used by the reference Fourier impleme
 
 The image is transformed from the spatial domain into the spatial-frequency domain using the **2-D Discrete Fourier Transform (DFT)**.
 
-For an image of dimensions $M \times N$, the 2-D DFT is
+For an image of dimensions \(M \times N\), the 2-D DFT is
 
-$$
+```math
 F(u,v)
 =
 \sum_{x=0}^{M-1}
@@ -128,35 +128,35 @@ e^{-j2\pi
 +
 \frac{vy}{N}
 \right)}
-$$
+```
 
 where:
 
-- $f(x,y)$ is the original image,
-- $F(u,v)$ is the Fourier coefficient,
-- $u$ is the vertical spatial-frequency index,
-- $v$ is the horizontal spatial-frequency index,
-- $j=\sqrt{-1}$.
+- \(f(x,y)\) is the original image,
+- \(F(u,v)\) is the Fourier coefficient,
+- \(u\) is the vertical spatial-frequency index,
+- \(v\) is the horizontal spatial-frequency index,
+- \(j=\sqrt{-1}\).
 
 Each Fourier coefficient is generally a complex number:
 
-$$
+```math
 F(u,v)=a+jb
-$$
+```
 
-where $a$ is the real component and $b$ is the imaginary component.
+where \(a\) is the real component and \(b\) is the imaginary component.
 
 The same coefficient may alternatively be represented in magnitude-phase form:
 
-$$
+```math
 F(u,v)
 =
 |F(u,v)|e^{j\phi(u,v)}
-$$
+```
 
 with magnitude
 
-$$
+```math
 |F(u,v)|
 =
 \sqrt{
@@ -164,19 +164,19 @@ $$
 +
 \operatorname{Im}(F(u,v))^2
 }
-$$
+```
 
 and phase
 
-$$
+```math
 \phi(u,v)
 =
 \operatorname{atan2}
 \left(
 \operatorname{Im}(F(u,v)),
 \operatorname{Re}(F(u,v))
-\right).
-$$
+\right)
+```
 
 Therefore, the Fourier transform represents the image as a combination of many spatial-frequency components having different magnitudes and phases.
 
@@ -186,11 +186,11 @@ Therefore, the Fourier transform represents the image as a combination of many s
 
 Calculating the DFT directly is computationally expensive.
 
-For a one-dimensional signal containing $N$ samples, direct DFT evaluation has approximately
+For a one-dimensional signal containing \(N\) samples, direct DFT evaluation has approximately
 
-$$
+```math
 O(N^2)
-$$
+```
 
 computational complexity.
 
@@ -198,39 +198,39 @@ The **Fast Fourier Transform (FFT)** is an efficient algorithm for computing the
 
 A radix-2 Cooley-Tukey FFT recursively separates a sequence into its even and odd indexed samples:
 
-$$
+```math
 X[k]
 =
 E[k]
 +
 W_N^k O[k]
-$$
+```
 
 and
 
-$$
+```math
 X[k+N/2]
 =
 E[k]
 -
 W_N^k O[k]
-$$
+```
 
 where
 
-$$
+```math
 W_N^k
 =
 e^{-j2\pi k/N}
-$$
+```
 
 is the twiddle factor.
 
 This reduces the typical computational complexity to approximately
 
-$$
-O(N\log N).
-$$
+```math
+O(N\log N)
+```
 
 For a two-dimensional image, the transform is separable. A 2-D Fourier transform can therefore be computed by:
 
@@ -245,9 +245,9 @@ The application uses NumPy's optimized FFT implementation for practical image pr
 
 After transformation, every Fourier coefficient has a magnitude
 
-$$
-A(u,v)=|F(u,v)|.
-$$
+```math
+A(u,v)=|F(u,v)|
+```
 
 Large-magnitude coefficients represent Fourier components that make a relatively strong contribution to the image.
 
@@ -255,11 +255,11 @@ Small-magnitude coefficients make weaker individual contributions.
 
 The application can display the Fourier magnitude spectrum using logarithmic scaling:
 
-$$
+```math
 S(u,v)
 =
-\log\left(1+|F(u,v)|\right).
-$$
+\log\left(1+|F(u,v)|\right)
+```
 
 Logarithmic scaling is useful because Fourier magnitudes can span a very large numerical range.
 
@@ -269,37 +269,37 @@ Logarithmic scaling is useful because Fourier magnitudes can span a very large n
 
 The central compression operation is **magnitude percentile thresholding**.
 
-Suppose the user selects a compression percentile $P$.
+Suppose the user selects a compression percentile \(P\).
 
 The program collects the magnitudes of all Fourier coefficients:
 
-$$
+```math
 \{|F(u,v)|\}
-$$
+```
 
-and determines the $P$-th percentile:
+and determines the \(P\)-th percentile:
 
-$$
+```math
 T
 =
 \operatorname{Percentile}
 \left(
 |F(u,v)|,P
-\right).
-$$
+\right)
+```
 
-The value $T$ becomes the compression threshold.
+The value \(T\) becomes the compression threshold.
 
 The filtered spectrum is then defined as
 
-$$
+```math
 \hat{F}(u,v)
 =
 \begin{cases}
-F(u,v), & |F(u,v)| \geq T \\[6pt]
+F(u,v), & |F(u,v)| \geq T \\
 0, & |F(u,v)| < T
 \end{cases}
-$$
+```
 
 Thus, Fourier coefficients having magnitudes below the selected threshold are removed.
 
@@ -322,15 +322,15 @@ The slider represents the approximate fraction of Fourier coefficients being dis
 
 For example, at
 
-$$
+```math
 P=99.4\%
-$$
+```
 
 approximately
 
-$$
+```math
 100-99.4=0.6\%
-$$
+```
 
 of the strongest Fourier coefficients remain.
 
@@ -342,25 +342,25 @@ The exact number can differ slightly when multiple coefficients have equal magni
 
 Before thresholding, the Fourier matrix is dense:
 
-$$
+```math
 \begin{bmatrix}
 F_{00} & F_{01} & F_{02} & \cdots \\
 F_{10} & F_{11} & F_{12} & \cdots \\
 F_{20} & F_{21} & F_{22} & \cdots \\
 \vdots & \vdots & \vdots & \ddots
 \end{bmatrix}
-$$
+```
 
 After aggressive magnitude thresholding, the matrix may become
 
-$$
+```math
 \begin{bmatrix}
 F_{00} & 0 & 0 & \cdots \\
 0 & F_{11} & 0 & \cdots \\
 0 & 0 & 0 & \cdots \\
 \vdots & \vdots & \vdots & \ddots
-\end{bmatrix}.
-$$
+\end{bmatrix}
+```
 
 Most elements are now zero.
 
@@ -430,13 +430,13 @@ This is an important experimental result of the project rather than an error in 
 
 The project therefore demonstrates the relationship between
 
-$$
+```math
 \text{coefficient retention}
 \quad\longleftrightarrow\quad
 \text{file size}
 \quad\longleftrightarrow\quad
-\text{reconstruction quality}.
-$$
+\text{reconstruction quality}
+```
 
 ---
 
@@ -446,7 +446,7 @@ To reconstruct the image, the sparse NPZ matrix is loaded and converted back int
 
 The **Inverse Discrete Fourier Transform (IDFT)** is then calculated:
 
-$$
+```math
 f'(x,y)
 =
 \frac{1}{MN}
@@ -458,34 +458,34 @@ e^{j2\pi
 \frac{ux}{M}
 +
 \frac{vy}{N}
-\right)}.
-$$
+\right)}
+```
 
 Here,
 
-$$
+```math
 \hat{F}(u,v)
-$$
+```
 
 is the compressed Fourier spectrum.
 
 If no coefficients were removed,
 
-$$
-\hat{F}(u,v)=F(u,v),
-$$
+```math
+\hat{F}(u,v)=F(u,v)
+```
 
 and, apart from numerical rounding,
 
-$$
-f'(x,y)\approx f(x,y).
-$$
+```math
+f'(x,y)\approx f(x,y)
+```
 
 When coefficients are removed,
 
-$$
-\hat{F}(u,v)\neq F(u,v),
-$$
+```math
+\hat{F}(u,v)\neq F(u,v)
+```
 
 so the reconstructed image differs from the original.
 
@@ -501,23 +501,23 @@ The discarded Fourier coefficients cannot be recovered from the compressed file.
 
 Increasing the compression percentile generally causes
 
-$$
+```math
 \text{fewer coefficients}
 \Rightarrow
 \text{smaller sparse representation}
 \Rightarrow
-\text{greater reconstruction error}.
-$$
+\text{greater reconstruction error}
+```
 
 Conversely,
 
-$$
+```math
 \text{more coefficients}
 \Rightarrow
 \text{better reconstruction}
 \Rightarrow
-\text{larger compressed representation}.
-$$
+\text{larger compressed representation}
+```
 
 This produces the fundamental compression-quality trade-off demonstrated by the application.
 
@@ -527,9 +527,9 @@ This produces the fundamental compression-quality trade-off demonstrated by the 
 
 Reconstruction error is measured using **Mean Squared Error (MSE)**.
 
-For an image containing $MN$ pixels,
+For an image containing \(MN\) pixels,
 
-$$
+```math
 \operatorname{MSE}
 =
 \frac{1}{MN}
@@ -537,16 +537,16 @@ $$
 \sum_{y=0}^{N-1}
 \left[
 f(x,y)-f'(x,y)
-\right]^2.
-$$
+\right]^2
+```
 
 A smaller MSE indicates that the reconstructed image is numerically closer to the original.
 
 For perfect reconstruction,
 
-$$
-\operatorname{MSE}=0.
-$$
+```math
+\operatorname{MSE}=0
+```
 
 ---
 
@@ -556,31 +556,31 @@ The application also calculates **Peak Signal-to-Noise Ratio (PSNR)**.
 
 For an 8-bit grayscale image,
 
-$$
-MAX_I=255.
-$$
+```math
+MAX_I=255
+```
 
 PSNR is calculated as
 
-$$
+```math
 \operatorname{PSNR}
 =
 10\log_{10}
 \left(
 \frac{MAX_I^2}{\operatorname{MSE}}
 \right)
-$$
+```
 
 or equivalently,
 
-$$
+```math
 \operatorname{PSNR}
 =
 20\log_{10}
 \left(
 \frac{255}{\sqrt{\operatorname{MSE}}}
-\right).
-$$
+\right)
+```
 
 PSNR is measured in decibels (dB).
 
@@ -588,9 +588,9 @@ Higher PSNR generally indicates that the reconstructed image is closer to the or
 
 If
 
-$$
-\operatorname{MSE}=0,
-$$
+```math
+\operatorname{MSE}=0
+```
 
 the theoretical PSNR becomes infinite.
 
@@ -598,19 +598,19 @@ the theoretical PSNR becomes infinite.
 
 # 13. Compression Ratio
 
-The program compares the original file size $S_o$ with the compressed Fourier representation $S_c$.
+The program compares the original file size \(S_o\) with the compressed Fourier representation \(S_c\).
 
 The compression ratio is
 
-$$
-R=\frac{S_o}{S_c}.
-$$
+```math
+R=\frac{S_o}{S_c}
+```
 
 For example,
 
-$$
+```math
 R=1.65
-$$
+```
 
 means the original file occupies approximately 1.65 times as much storage as the compressed representation.
 
@@ -626,36 +626,36 @@ This is displayed as:
 
 The percentage reduction in file size is calculated as
 
-$$
+```math
 \text{Reduction}
 =
 \left(
 1-\frac{S_c}{S_o}
-\right)\times100\%.
-$$
+\right)\times100\%
+```
 
 For example, if
 
-$$
+```math
 S_o=152.2\text{ KB}
-$$
+```
 
 and
 
-$$
-S_c=92.2\text{ KB},
-$$
+```math
+S_c=92.2\text{ KB}
+```
 
 then
 
-$$
+```math
 \text{Reduction}
 =
 \left(
 1-\frac{92.2}{152.2}
 \right)\times100
-\approx39.4\%.
-$$
+\approx39.4\%
+```
 
 A negative value means that the sparse Fourier representation is larger than the original file.
 
@@ -705,8 +705,9 @@ Fourier-Image-Compressor/
 ├── tests/
 │   └── test_engine.py
 │
-├── samples/
-│   └── sample 1.png
+├── Artifact/
+│   ├── README.txt
+│   └── ScreenShot_1.png
 │
 └── output/
 ```
@@ -815,19 +816,19 @@ The project demonstrates several important concepts from Signals and Systems.
 
 A grayscale image is treated as a two-dimensional discrete signal:
 
-$$
-f(x,y).
-$$
+```math
+f(x,y)
+```
 
 ## Frequency-Domain Representation
 
 The DFT decomposes the spatial signal into spatial-frequency components:
 
-$$
+```math
 f(x,y)
 \longleftrightarrow
-F(u,v).
-$$
+F(u,v)
+```
 
 ## Superposition
 
@@ -837,9 +838,9 @@ The image can be interpreted as the superposition of many spatial-frequency comp
 
 Each Fourier coefficient contains both magnitude and phase information:
 
-$$
-F(u,v)=|F(u,v)|e^{j\phi(u,v)}.
-$$
+```math
+F(u,v)=|F(u,v)|e^{j\phi(u,v)}
+```
 
 ## Information Reduction
 
@@ -851,7 +852,7 @@ The remaining components are combined through the inverse transform to reconstru
 
 Therefore, the complete system can be summarized mathematically as
 
-$$
+```math
 f(x,y)
 \xrightarrow{\mathrm{DFT}}
 F(u,v)
@@ -859,17 +860,17 @@ F(u,v)
 \hat{F}(u,v)
 \xrightarrow{\mathrm{Sparse\ Encoding}}
 \text{NPZ}
-$$
+```
 
 followed during decoding by
 
-$$
+```math
 \text{NPZ}
 \xrightarrow{\mathrm{Sparse\ Decoding}}
 \hat{F}(u,v)
 \xrightarrow{\mathrm{IDFT}}
-f'(x,y).
-$$
+f'(x,y)
+```
 
 ---
 
